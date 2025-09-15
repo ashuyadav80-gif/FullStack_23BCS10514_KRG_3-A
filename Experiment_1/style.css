@@ -1,0 +1,167 @@
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    background-color: #f4f6f9;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  
+  /* Header Section */
+  header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #0077b6, #00b4d8);
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  header img {
+    border-radius: 50%;
+    margin-top: 15px;
+    border: 3px solid #fff;
+  }
+  
+  /* Navigation */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 20px 0;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #0077b6;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  nav a:hover {
+    background-color: #0077b6;
+    color: white;
+  }
+  
+  /* Sections */
+  section {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  
+  h2 {
+    color: #0077b6;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #00b4d8;
+    display: inline-block;
+    padding-bottom: 5px;
+  }
+  
+  /* Skills & Certificates */
+  ul {
+    list-style-type: square;
+    padding-left: 20px;
+  }
+  
+  ul li {
+    margin: 8px 0;
+    font-weight: 500;
+  }
+  
+  /* Projects */
+  ol {
+    padding-left: 20px;
+  }
+  
+  ol li {
+    margin: 12px 0;
+    font-weight: bold;
+    color: #023e8a;
+  }
+  
+  section p {
+    margin: 5px 0 15px 0;
+    color: #555;
+  }
+  
+  /* Table (Qualification) */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  
+  table th, table td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  table th {
+    background: #0077b6;
+    color: white;
+  }
+  
+  table tr:nth-child(even) {
+    background: #f9f9f9;
+  }
+  
+  /* Form */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  form label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  form input, form textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  form input[type="submit"] {
+    background: #0077b6;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  form input[type="submit"]:hover {
+    background: #023e8a;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      align-items: center;
+    }
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    table tr {
+      margin-bottom: 15px;
+    }
+  }
+  
