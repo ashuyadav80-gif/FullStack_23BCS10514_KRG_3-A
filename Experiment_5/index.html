@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OOP Inheritance Demo — Person / Student / Teacher</title>
+  <style>
+    :root {
+      --bg: #0f1724;
+      --card: #0b1220;
+      --accent: #60a5fa;
+      --muted: #94a3b8;
+      --glass: rgba(255, 255, 255, 0.03);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #071025 0%, #081828 100%);
+      color: #e6eef8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 980px
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 0
+    }
+
+    p.sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px
+    }
+
+    .card {
+      background: var(--card);
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.03)
+    }
+
+    form .row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px
+    }
+
+    input[type=text],
+    input[type=number],
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: var(--glass);
+      color: inherit
+    }
+
+    button {
+      background: var(--accent);
+      border: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: #03202a;
+      font-weight: 600;
+      cursor: pointer
+    }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--muted)
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 360px;
+      overflow: auto
+    }
+
+    .item {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--muted)
+    }
+
+    pre.console {
+      background: #021627;
+      color: #bfe7ff;
+      padding: 12px;
+      border-radius: 8px;
+      min-height: 120px;
+      white-space: pre-wrap;
+      font-size: 13px;
+      overflow: auto
+    }
+
+    footer {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    @media (max-width:880px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 12px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>OOP Inheritance Demo — Person / Student / Teacher</h1>
+        <p class="sub">ES6 classes, method overriding, polymorphism &amp; <code>instanceof</code>. Interactive demo.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h3 style="margin-top:0;margin-bottom:10px">Create a new object</h3>
+        <form id="createForm">
+          <div class="row">
+            <div style="flex:1">
+              <label for="type">Type</label>
+              <select id="type">
+                <option value="Person">Person</option>
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
+              </select>
+            </div>
+            <div style="width:100px">
+              <label for="age">Age</label>
+              <input id="age" type="number" min="1" value="20" />
+            </div>
+          </div>
+
+          <div style="margin-bottom:10px">
+            <label for="name">Name</label>
+            <input id="name" type="text" placeholder="e.g. Amit" required />
+          </div>
+
+          <div id="studentFields" style="display:none">
+            <label for="grade">Grade</label>
+            <input id="grade" type="text" placeholder="e.g. A" />
+          </div>
+
+          <div id="teacherFields" style="display:none">
+            <label for="subject">Subject</label>
+            <input id="subject" type="text" placeholder="e.g. Mathematics" />
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button type="submit">Add</button>
+            <button type="button" id="clearBtn" class="secondary">Clear All</button>
+          </div>
+        </form>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+
+        <h4 style="margin:6px 0">Objects List</h4>
+        <div class="list card" id="objectsList" style="padding:12px"></div>
+
+      </section>
+
+      <aside class="card">
+        <h3 style="margin-top:0">Console & Demonstration</h3>
+        <p class="meta">Every created object's <code>displayInfo()</code> is called to show polymorphism. Use the
+          buttons on items to test <code>instanceof</code>.</p>
+
+        <pre id="console" class="console">Ready — create a Person, Student or Teacher using the form on the left.
+
+</pre>
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="showAll">Call displayInfo() for all</button>
+          <button id="showTypes" class="secondary">Show instanceof results</button>
+        </div>
+
+        <footer>
+          <p>Code uses ES6 <code>class</code>, <code>extends</code>, and <code>super()</code>. Works in modern browsers
+            & Node.js.</p>
+        </footer>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // ===== ES6 classes (same logic as the example) =====
+    class Person {
+      constructor(name, age) {
+        this.name = name;
+        this.age = age;
+      }
+
+      displayInfo() {
+        return `Name: ${this.name}, Age: ${this.age}`;
+      }
+    }
+
+    class Student extends Person {
+      constructor(name, age, grade) {
+        super(name, age);
+        this.grade = grade;
+      }
+
+      // Override
+      displayInfo() {
+        return `Student Name: ${this.name}, Age: ${this.age}, Grade: ${this.grade}`;
+      }
+    }
+
+    class Teacher extends Person {
+      constructor(name, age, subject) {
+        super(name, age);
+        this.subject = subject;
+      }
+
+      // Override
+      displayInfo() {
+        return `Teacher Name: ${this.name}, Age: ${this.age}, Subject: ${this.subject}`;
+      }
+    }
+
+    // ===== UI & state =====
+    const objects = []; // store created objects
+
+    const form = document.getElementById('createForm');
+    const typeEl = document.getElementById('type');
+    const nameEl = document.getElementById('name');
+    const ageEl = document.getElementById('age');
+    const gradeEl = document.getElementById('grade');
+    const subjectEl = document.getElementById('subject');
+    const studentFields = document.getElementById('studentFields');
+    const teacherFields = document.getElementById('teacherFields');
+    const objectsList = document.getElementById('objectsList');
+    const consoleEl = document.getElementById('console');
+    const showAllBtn = document.getElementById('showAll');
+    const showTypesBtn = document.getElementById('showTypes');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function log(...args) {
+      const text = args.join(' ');
+      consoleEl.textContent += text + '\n';
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+      // Also print to browser console for developers
+      // console.log(...args);
+    }
+
+    function renderList() {
+      objectsList.innerHTML = '';
+      objects.forEach((obj, idx) => {
+        const el = document.createElement('div');
+        el.className = 'item';
+
+        const left = document.createElement('div');
+        const title = document.createElement('div');
+        title.style.fontWeight = 700;
+        title.textContent = obj.name;
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = obj.displayInfo();
+
+        left.appendChild(title);
+        left.appendChild(meta);
+
+        const right = document.createElement('div');
+        right.style.display = 'flex';
+        right.style.flexDirection = 'column';
+        right.style.alignItems = 'flex-end';
+        right.style.gap = '8px';
+
+        const infoBtn = document.createElement('button');
+        infoBtn.textContent = 'Call displayInfo()';
+        infoBtn.onclick = () => {
+          log(obj.displayInfo());
+        };
+
+        const typeBtn = document.createElement('button');
+        typeBtn.className = 'secondary';
+        typeBtn.textContent = 'Check type';
+        typeBtn.onclick = () => {
+          if (obj instanceof Student) log(`${obj.name} is a Student`);
+          else if (obj instanceof Teacher) log(`${obj.name} is a Teacher`);
+          else if (obj instanceof Person) log(`${obj.name} is a Person`);
+        };
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'secondary';
+        removeBtn.textContent = 'Remove';
+        removeBtn.onclick = () => {
+          objects.splice(idx, 1);
+          renderList();
+          log(`Removed ${obj.name}`);
+        };
+
+        right.appendChild(infoBtn);
+        right.appendChild(typeBtn);
+        right.appendChild(removeBtn);
+
+        el.appendChild(left);
+        el.appendChild(right);
+
+        objectsList.appendChild(el);
+      });
+
+      if (objects.length === 0) {
+        objectsList.innerHTML = '<div class="meta">No objects yet — add one using the form above.</div>';
+      }
+    }
+
+    typeEl.addEventListener('change', () => {
+      const val = typeEl.value;
+      studentFields.style.display = val === 'Student' ? 'block' : 'none';
+      teacherFields.style.display = val === 'Teacher' ? 'block' : 'none';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const t = typeEl.value;
+      const name = nameEl.value.trim() || 'Unknown';
+      const age = Number(ageEl.value) || 0;
+
+      let instance;
+      if (t === 'Student') {
+        const grade = gradeEl.value.trim() || 'N/A';
+        instance = new Student(name, age, grade);
+      } else if (t === 'Teacher') {
+        const subject = subjectEl.value.trim() || 'General';
+        instance = new Teacher(name, age, subject);
+      } else {
+        instance = new Person(name, age);
+      }
+
+      objects.push(instance);
+      renderList();
+      log(`Created: ${instance.displayInfo()}`);
+
+      // reset name after create (but keep type)
+      nameEl.value = '';
+    });
+
+    showAllBtn.addEventListener('click', () => {
+      if (objects.length === 0) { log('No objects to show.'); return; }
+      log('--- Calling displayInfo() for all objects ---');
+      objects.forEach(o => log(o.displayInfo()));
+    });
+
+    showTypesBtn.addEventListener('click', () => {
+      if (objects.length === 0) { log('No objects to test.'); return; }
+      log('--- instanceof checks ---');
+      objects.forEach(o => {
+        if (o instanceof Student) log(`${o.name}: Student`);
+        else if (o instanceof Teacher) log(`${o.name}: Teacher`);
+        else if (o instanceof Person) log(`${o.name}: Person`);
+      });
+    });
+
+    clearBtn.addEventListener('click', () => {
+      objects.length = 0;
+      renderList();
+      consoleEl.textContent = 'Cleared all objects.\n';
+    });
+
+    // Seed with examples
+    objects.push(new Person('Ravi', 40));
+    objects.push(new Student('Amit', 20, 'A'));
+    objects.push(new Teacher('Neha', 35, 'Mathematics'));
+    renderList();
+    log('Seeded with sample objects (Ravi, Amit, Neha).');
+  </script>
+</body>
+
+</html>
